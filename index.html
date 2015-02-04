@@ -1,0 +1,198 @@
+<html>
+<head>
+<title>Computer Vision Project Report - Wu Lei</title>
+<style type="text/css">
+	body {
+		background: #feecce;
+	}
+	h1{
+		text-align: center;
+	}
+	h2 {
+		color: #c25e1c;
+	}
+	h3 {
+		color: #78431f;
+	}
+	div.course {
+		text-align: center;
+		font-size: 30px;
+		margin: 20px;
+		padding: 20px;
+	}
+	div.info {
+		text-align: center;
+		font-size: 18px;
+	}
+	div.main {
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+	div.column1{
+		text-align: center;
+		display: inline-block;
+		margin: 0 auto;
+	}
+	div.column1 img{
+		margin: 30px 10px 10px 10px ;
+		width: 800px;
+	}
+
+	div.column2{
+		display: inline-block;
+	}
+	div.column2 img{
+		margin: 10px;
+		width: 400px;
+	}
+
+	div.column2 div.description{
+		text-align: center;
+	}
+	table {
+		margin: 0 auto;
+		border-collapse: collapse;
+	}
+	table thead th {
+		min-width: 100px;
+	}
+	table th, table td {
+		border: solid 1px #000;
+		border-collapse: 0;
+		padding: 0 10px;
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+	<div class="course">CSE 559A Computer Vision</div>
+	<h1>Project 1 - Report</h1>
+	<div class="info">Wu Lei | 441341</div>
+	<div class="info">fred.wulei@gmail.com</div>
+	<div class="main">
+		<h2>Feature Detection</h2>
+		<p>For feature detection, I used the basic ideas of Harris Corner Detection. For all pixels, compute their Harris Matrices according to the derivatives of pixels in a neighbor window, which is set to 5*5 in my case. And for the derivatives, I firstly simply use the gradient between two pixels, and then shifted to Sobel Operator to get a higher performance. During the computing of Harris Matrices, Gaussian filter is also used to give different neighbors different weights. After getting all the points of interest, a finding-local-maximum filter is applied to remove those points who do not have a maximum in a 5*5 neighborhood.</p>
+
+
+
+		<h2>Feature Description</h2>
+		<p>I used a simplified version of SIFT method (which I call <strong>DummySIFT</strong>) to describe every feature points in the image. For every feature, first compute the derivatives (using Sobel) of the pixels in a 16*16 window around, which is divided to 16 4*4 patches, then compute the angle of derivative by using the horizonal derivative to divide the vertical one. After getting the angle of every pixels around, we sum up all the angles in a single patch to 8 directions (from -PI to PI). Finally using the 128-dimension vector to describe this feature point.</p>
+
+		<h2>Feature Matching</h2>
+		<p>Two different kinds of matching algorithm is realized. The first one is using SSD to find the most similar points of interest. The second way is an improvement of the first one, calculate the ratio of best match and second best match, using threshold to determine whether to keep this feature.</p>
+		<p><i>There is something wrong with my codes that ratio performs worse than SSD. I'm trying to fix the bugs...</i></p>
+
+
+		<h2>Performance</h2>
+		<!--
+		<table>
+			<caption>ROC of two sample images</caption>
+			<thead>
+				<tr>
+					<th></th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th></th>
+					<th></th>
+				</tr>
+			</tbody>
+		</table>
+		-->
+		<h3>ROC</h3>
+		<div class="img-wrapper column2">
+			<img src="images/roc_graf.png" />
+			<div class="description">ROC of Graf</div>
+		</div>
+		<div class="img-wrapper column2">
+			<img src="images/roc_yosemite.png" />
+			<div class="description">ROC of Yosemite</div>
+		</div>
+
+		<h3>Harris Values Image</h3>
+		<div class="img-wrapper column2">
+			<img src="images/harris_graf.png" />
+			<div class="description">Harris Values Image of Graf</div>
+		</div>
+		<div class="img-wrapper column2">
+			<img src="images/harris_yosemite.png" />
+			<div class="description">Harris Values Image of Yosemite</div>
+		</div>
+
+		<h3>AUC</h3>
+
+		<table>
+			<!-- <caption>AUC of Benchmark images</caption> -->
+			<thead>
+				<tr>
+					<th></th>
+					<th>bikes</th>
+					<th>graf</th>
+					<th>leuven</th>
+					<th>wall</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>Window + SSD</th>
+					<td>0.740313</td>
+					<td>0.413145</td>
+					<td>0.876935</td>
+					<td>0.769760</td>
+				</tr>
+				<tr>
+					<th>Window + ratio</th>
+					<td>0.686677</td>
+					<td>0.366473</td>
+					<td>0.729090</td>
+					<td>0.682773</td>
+				</tr>
+				<tr>
+					<th>DummySIFT + SSD</th>
+					<td>0.547062</td>
+					<td>0.406410</td>
+					<td>0.582562</td>
+					<td>0.575758</td>
+				</tr>
+				<tr>
+					<th>DummySIFT + ratio</th>
+					<td>0.351481</td>
+					<td>0.380620</td>
+					<td>0.520979</td>
+					<td>0.533333</td>
+				</tr>
+				
+			</tbody>
+		</table>
+		
+		<h2>My Testing Images</h2>
+
+		<div class="img-wrapper column1">
+			<img src="images/harris_wustl.png" />
+			<div class="description">Harris Value Image</div>
+		</div>
+
+		<div class="img-wrapper column1">
+			<img src="images/wustl1_2.png" />
+			<div class="description">Performance in Translation</div>
+		</div>
+		<div class="img-wrapper column1">
+			<img src="images/wustl1_5.png" />
+			<div class="description">Performance in Rotation</div>
+		</div>
+		<div class="img-wrapper column1">
+			<img src="images/wustl1_4.png" />
+			<div class="description">Performance in Scaling</div>
+		</div>
+		
+		
+
+
+		<h2>Strength & Weakness</h2>
+		<p>This way of descibing and matching features is easy to compute and realise. It has good performace under images with large numbers of delicate features. And it is also invariant with translation and rotation.</p>
+		<p>However, when using with images which have multiple same kind of features, or with large number of noise, the matching performance is not very good. Also, this method of detection is sensitive to value of threshold and window size, different values may lead to far different results. And, it is not invariant with scaling.</p>
+	</div>
+</body>
+</html>
