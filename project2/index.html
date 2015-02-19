@@ -1,0 +1,117 @@
+<html>
+<head>
+<title>Computer Vision Project Report - Wu Lei</title>
+<style type="text/css">
+	body {
+		background: #ddefed;
+	}
+	h1{
+		text-align: center;
+	}
+	h2 {
+		color: #1C99C2;
+	}
+	h3 {
+		color: #246791;
+	}
+	div.course {
+		text-align: center;
+		font-size: 30px;
+		margin: 20px;
+		padding: 20px;
+	}
+	div.info {
+		text-align: center;
+		font-size: 18px;
+	}
+	div.main {
+		max-width: 1000px;
+		margin: 0 auto;
+	}
+	div.column1{
+		text-align: center;
+		display: inline-block;
+		margin: 0 auto;
+	}
+	div.column1 img{
+		margin: 30px 10px 10px 10px ;
+		width: 800px;
+	}
+
+	div.column2{
+		display: inline-block;
+	}
+	div.column2 img{
+		margin: 10px;
+		width: 400px;
+	}
+
+	div.column2 div.description{
+		text-align: center;
+	}
+	table {
+		margin: 0 auto;
+		border-collapse: collapse;
+	}
+	table thead th {
+		min-width: 100px;
+	}
+	table th, table td {
+		border: solid 1px #000;
+		border-collapse: 0;
+		padding: 0 10px;
+		text-align: center;
+	}
+</style>
+</head>
+<body>
+	<div class="course">CSE 559A Computer Vision</div>
+	<h1>Project 2 - Panorama Mosaic Stitching</h1>
+	<div class="info">Wu Lei | 441341</div>
+	<div class="info">fred.wulei@gmail.com</div>
+	<div class="main">
+		<h2>Warping Images</h2>
+		<p>In the process of warping image, I warped point of image to a spherical coordinate. And I also applied radial distortion.</p>
+		<h3>Radial Distortion</h3>
+		<div class="img-wrapper column2">
+			<img src="images/radial1.png" />
+			<img src="images/radial2.png" />
+			<img src="images/radial3.png" />
+			<!-- <div class="description">Performance in Rotation</div> -->
+		</div>
+		<p>During the process of finding correct parameter of radial distortion, I took photos of the checkbox images with the same setting of the camera. Then I imported the images from different angle to "Jean-Yves Bouguets" toolkit package and calculated the value of focus length, k1 and k2.</p>
+		<p>A summary of results is shown below:</p>
+		<p>Calibration results after optimization (with uncertainties):</p>
+		<p>Focal Length: fc = [ 338.07971   338.62309 ] ± [ 2.73375   2.72910 ]</p>
+		<p>Principal point: cc = [ 234.62282   272.55900 ] ± [ 1.55212   1.51634 ]</p>
+		<p>Skew: alpha_c = [ 0.00000 ] ± [ 0.00000  ]   => angle of pixel axes = 90.00000 ± 0.00000 degrees</p>
+		<p>Distortion: kc = [ -0.04043   0.02809   -0.00158   -0.00036  0.00000 ] ± [ 0.00786   0.01283   0.00139   0.00113  0.00000 ]</p>
+		<p>Pixel error: err = [ 0.37818   0.42895 ]</p>
+
+		<h2>Computing Features</h2>
+		<p>I used harris corner detection of detecting features from lab1, found all the points of interest in every images, then also from the lab1, I used my simplified SIFT algorithm here to output the description of every features.</p>
+
+		<h2>Matching Features and Aligning Pairs</h2>
+		<p>In matching features, I used SSD to find the best match of every features. After that, I used RANSAC algorithm to randomly pick initial points and build the model ( here I used translation to model the transform of images), ran this codes for 200 rounds and found the best solution of translation.</p>
+
+		<h2>Blending Images</h2>
+		<p>In the process of blending image, I use the featuring to blend images and make it nature.</p>
+
+		<h2>Panoramas</h2>
+		<h3>Campus Gate</h3>
+		<div class="img-wrapper column1">
+			<img src="images/pano_campus.jpg" />
+		</div>
+		<h3>Same Person Appears Multiple Times</h3>
+		<div class="img-wrapper column1">
+			<img src="images/pano_multi.jpg" />
+		</div>
+
+		<h2>Extra Credit</h2>
+		<p>Radial Distortion</p>
+		<p>Own 360 Panorama</p>
+		<p>Same Person Multiple Times</p>
+
+	</div>
+</body>
+</html>
